@@ -7,12 +7,12 @@
         </div>
         <div class="cal-body">
             <div class="cal-weeks">
-                <span class="item" v-for="(dayName, dayIndex) in i18n[calendarOp.options.local].dayNames" :key="dayIndex">
+                <span class="item" v-for="(dayName, dayIndex) in i18n[calendar.options.local].dayNames" :key="dayIndex">
                     {{i18n[calendar.options.local].dayNames[(dayIndex + calendar.options.weekStartOn)%7]}}
                 </span>
             </div>
             <div class="cal-dates">
-                <div v-for="date in dayList" :key="date.date" class="item" :class="[{'selected': date.status ? (selected == date.date) : false, 'avail-sale': date.status ? date.availS : false, 'sale-out': date.status ? date.outS : false}]" @click="dateHandle(date)">
+                <div v-for="date in dayList" :key="date.date" class="item" :class="[{'selected': date.status ? (selected == date.date) : false, 'avail-sale': date.status ? date.availS : false, 'sale-out': date.status ? date.outS : false}]" @click="dateHandle(date)" >
                     <p>{{date.status ? date.date.split('-')[2] : '&nbsp'}}</p>
                     <div v-if="date.status && (date.availS || date.outS)" class="state" ></div>
                 </div>
@@ -29,22 +29,17 @@
         data(){
             return {
                 i18n,
-                selected: '',
-                calendar: {}
+                selected: '' //当天默认选中
             }
         },
         props: {
-          calendarOp: {
+          calendar: {
               type: Object,
-              default: function(){
-                  return {}
-              }
+              require: true
           }
         },
         created(){
-            let dateObj = new Date()
-            this.selected =  `${dateObj.getFullYear()}-${dateObj.getMonth()+1}-${dateObj.getDate()}`
-            this.assOption()
+            this.selected =  this.today
         },
         computed: {
             dayList(){
@@ -70,6 +65,8 @@
                     item.setDate(startDate.getDate() + i)
 
                     let date = `${item.getFullYear()}-${item.getMonth()+1}-${item.getDate()}`
+                    let isbefore = new Date(date) - new Date(this.today)
+
                     if (this.calendar.params.curMonth === item.getMonth()) {
                         status = 1
                     } else {
@@ -77,7 +74,7 @@
                     }
 
                     //判断当天是否可售
-                    if(availSale.includes(date) && !saleOut.includes(date)){
+                    if(availSale.includes(date) && !saleOut.includes(date) && isbefore >=0){
                         availS = 1
                     }else{
                         availS = 0
@@ -100,39 +97,25 @@
                 }
                 return tempArr
             },
+            today(){
+                let dateObj = new Date()
+                return `${dateObj.getFullYear()}-${dateObj.getMonth()+1}-${dateObj.getDate()}`
+            },
             curYearMonth () {
                 let tempDate = Date.parse(new Date(`${this.calendar.params.curYear}/${this.calendar.params.curMonth+1}/01`))
                 return this.dateTimeFormatter(tempDate, this.i18n[this.calendar.options.local].format)
             }
         },
         methods: {
-            assOption(){
-                let dateObj = new Date()
-                let def = {
-                    options: {
-                        local: 'zh',
-                        weekStartOn: 0 //定义第一列从星期及开始 0为周日
-                    },
-                    params: {
-                        curYear: dateObj.getFullYear(),
-                        curMonth: dateObj.getMonth(),
-                        curDate: dateObj.getDate()
-                    },
-                    availSale: [],
-                    saleOut: [],
-                    otherData: {},
-                    callback: function(){}
-                }
-                this.calendar = Object.assign(def, this.calendarOp)
-            },
             dateHandle(date){
                 if(date.availS){
                     this.selected = date.date
+                    this.$emit('cur-day-changed', date.date)
+                    this.calendar.callback(date)
                 }
-                this.calendar.callback(date)
             },
             preMonth(){
-                if(this.calendarOp.params.curMonth > 0){
+                if(this.calendar.params.curMonth > 0){
                     this.calendar.params.curMonth--
                 }else{
                     this.calendar.params.curYear--
@@ -210,6 +193,7 @@
 
 <style lang="scss" scoped>
     .m-calendar{
+        background-color: #fff;
         .cal-header{
             text-align:center;
             height: 2rem;
