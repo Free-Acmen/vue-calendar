@@ -8,9 +8,10 @@
 </template>
 
 <script>
-    import cPanel from './cal-panel'
+    import cPanel from './component/cal-panel'
 
     export default{
+        name: 's-calendar',
         data(){
             return {
                 curDate: "",

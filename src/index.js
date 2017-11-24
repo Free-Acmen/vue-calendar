@@ -1,89 +1,58 @@
 'use strict'
 
-import vueEventCalendar from './vue-event-calendar.vue'
+import sCalendar from 'simple-caledar'
 
-function install (Vue, options = {}) {
-  const isVueNext = Vue.version.split('.')[0] === '2'
-  const inBrowser = typeof window !== 'undefined'
-  let dateObj = new Date()
-  const DEFAULT_OPTION = {
-    locale: 'zh', // en
-    color: ' #f29543',
-    className:'selected-day',
-    weekStartOn: 0 // 0 mean sunday
-  }
-  let Calendar = {
-    $vm: null,
-    bindEventBus (vm) {
-      this.$vm = vm
-    },
-    toDate (dateString) {
-      if (dateString === 'all') {
-        this.$vm.CALENDAR_EVENTS_DATA.params = {
-          curYear: dateObj.getFullYear(),
-          curMonth: dateObj.getMonth(),
-          curDate: dateObj.getDate(),
-          curEventsDate: 'all'
+
+function install(Vue, options = {}) {
+    const isVueNext = Vue.version.split('.')[0] === '2'
+    const inBrowser = typeof window !== 'undefined'
+    let dateObj = new Date()
+    const DEFAULT_OPTION = {
+        options: {
+            local: 'zh',
+            weekStartOn: 0, //定义第一列从星期及开始 0为周日
+            availSale: [],
+            saleOut: [],
+            name: 'calendar',
+            showIpt: true,
+            callback: function() {}
         }
-      } else {
-        let dateArr = dateString.split('/')
-        dateArr = dateArr.map((item) => {
-          return parseInt(item, 10)
-        })
-        this.$vm.CALENDAR_EVENTS_DATA.params = {
-          curYear: dateArr[0],
-          curMonth: dateArr[1]-1,
-          curDate: dateArr[2],
-          curEventsDate: dateString
-        }
-      }
-    },
-    nextMonth () {
-      if (this.$vm.CALENDAR_EVENTS_DATA.params.curMonth < 11) {
-        this.$vm.CALENDAR_EVENTS_DATA.params.curMonth++
-      } else {
-        this.$vm.CALENDAR_EVENTS_DATA.params.curYear++
-        this.$vm.CALENDAR_EVENTS_DATA.params.curMonth = 0
-      }
-    },
-    preMonth () {
-      if (this.$vm.CALENDAR_EVENTS_DATA.params.curMonth > 0) {
-        this.$vm.CALENDAR_EVENTS_DATA.params.curMonth--
-      } else {
-        this.$vm.CALENDAR_EVENTS_DATA.params.curYear--
-        this.$vm.CALENDAR_EVENTS_DATA.params.curMonth = 11
-      }
     }
-  }
 
-  const calendarOptions = Object.assign(DEFAULT_OPTION, options)
-
-  const VueCalendarBarEventBus = new Vue({
-    data: {
-      CALENDAR_EVENTS_DATA: {
-        options: calendarOptions,
-        params: {
-          curYear: dateObj.getFullYear(),
-          curMonth: dateObj.getMonth(),
-          curDate: dateObj.getDate(),
-          curEventsDate: 'all'
+    const calendae = {
+        $vm: null,
+        bindVm(vm) {
+            this.$vm = vm
         }
-      }
     }
-  })
 
-  if (inBrowser) {
-    window.VueCalendarBarEventBus = VueCalendarBarEventBus
-    Calendar.bindEventBus(VueCalendarBarEventBus)
-  }
+    let calendarOptions = Object.assign(DEFAULT_OPTION, options)
 
-  Vue.component('vue-event-calendar', vueEventCalendar)
+    let sClendarVue = new Vue({
+        data: {
+            calendarData: {
+                options: calendarOptions,
+                params: {
+                    curYear: dateObj.getFullYear(),
+                    curMonth: dateObj.getMonth(),
+                    curDate: dateObj.getDate(),
+                    curEventsDate: 'all'
+                }
+            }
+        }
+    })
 
-  Vue.prototype.$EventCalendar = Calendar
+    if (inBrowser) {
+        window.sClendarVue = sClendarVue
+        calendar.bindVm(sClendarVue)
+    }
+
+    Vue.component(sCalendar.name, sCalendar)
+    Vue.prototype.$sCalendar = calendar
 }
 
 export default install
 
-if (typeof module === 'object' && module.exports) {
-  module.exports.install = install
+if (typeof module === 'object' && modult.exports) {
+    module.exports.install = install
 }
