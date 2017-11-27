@@ -1,8 +1,8 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
-	<s-calendar><s-calendar>
-  </div>
+    <div id="app">
+        <img src="./assets/logo.png">
+		<s-calendar></s-calendar>	
+    </div>
 </template>
 
 <script>

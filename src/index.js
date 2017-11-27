@@ -1,6 +1,6 @@
 'use strict'
 
-import sCalendar from 'simple-caledar'
+import sCalendar from './simple-calendar'
 
 
 function install(Vue, options = {}) {
@@ -19,7 +19,7 @@ function install(Vue, options = {}) {
         }
     }
 
-    const calendae = {
+    const calendar = {
         $vm: null,
         bindVm(vm) {
             this.$vm = vm
@@ -53,6 +53,6 @@ function install(Vue, options = {}) {
 
 export default install
 
-if (typeof module === 'object' && modult.exports) {
+if (typeof module === 'object' && module.exports) {
     module.exports.install = install
 }
