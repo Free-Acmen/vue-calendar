@@ -8,6 +8,7 @@
 </template>
 
 <script>
+    
     import cPanel from './component/cal-panel'
     const inBrowser = typeof window !== 'undefined'
     export default{
@@ -43,7 +44,7 @@
                         curMonth: dateObj.getMonth(),
                         curDate: dateObj.getDate()
                     },
-                    availSale: [],
+                    availSale: ['2017-11-27', '2017-11-28','2017-11-30'],
                     saleOut: [],
                     name: 'calendar',
                     showIpt: true,
@@ -75,7 +76,7 @@
         }
         .cal-panel{
             position: absolute;
-            top: 1.4rem;
+            top: 1.6rem;
             left: 0;
         }
     }

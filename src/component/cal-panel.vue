@@ -205,6 +205,7 @@
             }
         }
         .cal-body{
+            padding-top: .1rem;
             margin: 0 .5rem;
             border-top: 1px solid #DBDBDB;
             border-right: 1px solid #DBDBDB;
@@ -224,8 +225,8 @@
             }
             .cal-dates{
                 .item{
-                    padding-top: .1rem;
                     p{
+                        font-size: .7rem;
                         color: #ccc;
                     }
                     .state{
