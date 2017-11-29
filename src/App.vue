@@ -1,7 +1,7 @@
 <template>
-    <div id="app">
-        <img src="./assets/logo.png">
-		<s-calendar></s-calendar>	
+    <div id="app" style="text-align: center;">
+        <img src="./assets/logo.png" @click="test">
+		<s-calendar @month-changed="handleMonthChanged" @day-changed="handleDayChanged"></s-calendar>	
     </div>
 </template>
 
@@ -12,122 +12,58 @@ export default {
     return {
       msg: 'Welcome to Your Vue.js App'
     }
+  },
+  methods: {
+      test(){
+          this.$sCalendar.afterSelect(function(){
+
+          })
+      },
+      handleMonthChanged(date){
+          console.log(date)
+      },
+      handleDayChanged(date){
+          console.log(date)
+      }
   }
 }
 </script>
 
 <style lang="scss">
-body, div, span, header, footer, nav, section, aside, article, ul, dl, dt, dd, li, a, p, h1, h2, h3, h4,h5, h6, i, b, textarea, button, input, select, figure, figcaption {
-    padding: 0;
-    margin: 0;
-    list-style: none;
-    font-weight: normal;
-    text-decoration: none;
-    border: none;
-    color: #333;
-    box-sizing: border-box;
-    font-family: "Microsoft Yahei",sans-serif;
-    -webkit-tap-highlight-color:transparent;
-    -webkit-font-smoothing: antialiased;
-    -webkit-text-size-adjust:none;
-    -ms-user-select:none;
-    user-select:none;
-}
-table{border-collapse:collapse;}
-input[type=button], input[type=submit], input[type=file], button { cursor: pointer; -webkit-appearance: none; }
-img{
-	border:none;
-	max-width:100%;
-	vertical-align:bottom;
-}
-input,textarea:focus{outline:0;}
-i{font-style: normal;}
-
-body.modal-open{
-    position: fixed;
-    width: 100%;
-}
-
-/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
-::-webkit-scrollbar
-{
-    width: 0px;
-    height: 0px;
-    background-color: #F5F5F5;
-}
-
-/*定义滚动条轨道 内阴影+圆角*/
-::-webkit-scrollbar-track
-{
-    -webkit-box-shadow: inset 0 0 1px rgba(0,0,0,0);
-    border-radius: 10px;
-    background-color: #F5F5F5;
-}
-
-/*定义滑块 内阴影+圆角*/
-::-webkit-scrollbar-thumb
-{
-    border-radius: 10px;
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-    background-color: #555;
-}
-
-input[type="button"], input[type="submit"], input[type="search"], input[type="reset"] {
-    -webkit-appearance: none;
-}
-
-textarea { -webkit-appearance: none;}
-
-html,body{
-    height: 100%;
-    width: 100%;
-    background-color: #fefefe;
-}
-
-.clear:after{
-    content: '';
-    display: block;
-    clear: both;
-}
-
-.clear{
-    zoom:1;
-}
-
-.back_img{
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-}
-
-.margin{
-    margin: 0 auto;
-}
-
-.left{
-    float: left;
-}
-
-.right{
-    float: right;
-}
-
-.hide{
-    display: none;
-}
-
-.show{
-    display: block;
-}
-
-.ellipsis{
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-.padding-top{
-    padding-top: 2.5rem;
-}
-.filter-top{
-    padding-top: 4.5rem;
-}
+    body, div, span, ul, dl, dt, dd, li, a, p, h1, h2, h3, h4,h5, h6, i, b, textarea, button, input, select, figure, figcaption {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        font-weight: normal;
+        text-decoration: none;
+        border: none;
+        color: #333;
+        box-sizing: border-box;
+        font-family: "Microsoft Yahei",sans-serif;
+        -webkit-tap-highlight-color:transparent;
+        -webkit-font-smoothing: antialiased;
+        -webkit-text-size-adjust:none;
+        -ms-user-select:none;
+        user-select:none;
+    }
+    input[type=button], input[type=submit], input[type=file], button { cursor: pointer; -webkit-appearance: none; }
+    input,textarea:focus{outline:0;}
+    input[type="button"], input[type="submit"], input[type="search"], input[type="reset"] {
+        -webkit-appearance: none;
+    }
+    textarea { -webkit-appearance: none;}
+    .clear:after{
+        content: '';
+        display: block;
+        clear: both;
+    }
+    .clear{
+        zoom:1;
+    }
+    .left{
+        float: left;
+    }
+    .right{
+        float: right;
+    }
 </style>

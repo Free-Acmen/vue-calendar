@@ -24,25 +24,40 @@ function install(Vue, options = {}) {
     const inBrowser = typeof window !== 'undefined'
     let dateObj = new Date()
     const DEFAULT_OPTION = {
-        options: {
-            local: 'zh',
-            weekStartOn: 0, //定义第一列从星期及开始 0为周日
-            availSale: [],
-            saleOut: [],
-            name: 'calendar',
-            showIpt: true,
-            callback: function() {}
-        }
+        local: 'zh',
+        weekStartOn: 0, //定义第一列从星期及开始 0为周日
+        availSale: ['2017-11-30', '2017-12-1', '2017-12-3'],
+        saleOut: ['2017-12-5'],
+        name: 'calendar',
+        showIpt: true,
+        callback: function() {}
     }
 
     const calendar = {
         $vm: null,
         bindVm(vm) {
             this.$vm = vm
+        },
+        nextMonth() {
+            if (this.$vm.calendarData.params.curMonth < 11) {
+                this.$vm.calendarData.params.curMonth++
+            } else {
+                this.$vm.calendarData.params.curYear++
+                    this.$vm.calendarData.params.curMonth = 0
+            }
+        },
+        preMonth() {
+            if (this.$vm.calendarData.params.curMonth > 0) {
+                this.$vm.calendarData.params.curMonth--
+            } else {
+                this.$vm.calendarData.params.curYear--
+                    this.$vm.calendarData.params.curMonth = 11
+            }
         }
     }
 
     let calendarOptions = Object.assign(DEFAULT_OPTION, options)
+    console.log(calendarOptions)
 
     let sClendarVue = new Vue({
         data: {

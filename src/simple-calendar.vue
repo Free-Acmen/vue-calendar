@@ -1,14 +1,13 @@
 <template>
     <div class="simple-cal" >
-        <input v-if="calendar.showIpt" :name="calendar.name" type="text" placeholder="请选择日期..." :value="curDate" @click="handleCal">
-        <input v-else :name="calendar.name" type="hidden" placeholder="请选择日期..." :value="curDate">
-        <c-panel class="cal-panel" v-show="calState" :calendar="calendar" @cur-day-changed="handleChangeCurDay" ></c-panel>
+        <input v-if="calendarOp.options.showIpt" :name="calendarOp.options.name" type="text" placeholder="请选择日期..." :value="curDate" @click="handleCal">
+        <input v-else :name="calendarOp.options.name" type="hidden" placeholder="请选择日期..." :value="curDate">
+        <c-panel class="cal-panel" v-show="calState" :calendar="calendarOp" @cur-day-changed="handleChangeCurDay" @month-changed="handleMonthChanged"></c-panel>
         <slot name="cal-foot"></slot>
     </div>
 </template>
 
 <script>
-    
     import cPanel from './component/cal-panel'
     const inBrowser = typeof window !== 'undefined'
     export default{
@@ -16,45 +15,42 @@
         data(){
             return {
                 curDate: "",
-                calState: false,
-                calendar: {}
+                calState: false
             }
         },
-        props: {
-            sCalendarOp: {
-                type: Object,
-                default: function(){
-                    return {}
+        computed: {
+            calendarOp(){
+                let dateObj = new Date()
+                if(inBrowser){
+                    return window.sClendarVue.calendarData
+                }else{
+                    return {
+                        options: {
+                            local: 'zh',
+                            weekStartOn: 0, //定义第一列从星期及开始 0为周日
+                            availSale: ['2017-11-27', '2017-11-28','2017-11-30'],
+                            saleOut: [],
+                            name: 'calendar',
+                            showIpt: true,
+                            callback: function(){}
+                        },
+                        params: {
+                            curYear: dateObj.getFullYear(),
+                            curMonth: dateObj.getMonth(),
+                            curDate: dateObj.getDate()
+                        }
+                    }
                 }
             }
-        },
-        created(){
-            this.assOption()
         },
         methods: {
-            assOption(){
-                let dateObj = new Date()
-                let def = {
-                    options: {
-                        local: 'zh',
-                        weekStartOn: 0 //定义第一列从星期及开始 0为周日
-                    },
-                    params: {
-                        curYear: dateObj.getFullYear(),
-                        curMonth: dateObj.getMonth(),
-                        curDate: dateObj.getDate()
-                    },
-                    availSale: ['2017-11-27', '2017-11-28','2017-11-30'],
-                    saleOut: [],
-                    name: 'calendar',
-                    showIpt: true,
-                    callback: function(){}
-                }
-                this.calendar = Object.assign(def, this.sCalendarOp)
-            },
             handleChangeCurDay(date){
                 this.curDate = date
                 this.calState = false
+                this.$emit('day-changed', date)
+            },
+            handleMonthChanged(date){
+                this.$emit('month-changed', date)
             },
             handleCal(){
                 this.calState = true

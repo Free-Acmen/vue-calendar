@@ -5,14 +5,14 @@
             <span class="cal-title">{{curYearMonth}}</span>
             <span class="right" @click="nextMonth">&gt;</span>
         </div>
-        <div class="cal-body">
+        <div class="cal-body clear">
             <div class="cal-weeks">
                 <span class="item" v-for="(dayName, dayIndex) in i18n[calendar.options.local].dayNames" :key="dayIndex">
                     {{i18n[calendar.options.local].dayNames[(dayIndex + calendar.options.weekStartOn)%7]}}
                 </span>
             </div>
             <div class="cal-dates">
-                <div v-for="date in dayList" :key="date.date" class="item" :class="[{'selected': date.status ? (selected == date.date) : false, 'avail-sale': date.status ? date.availS : false, 'sale-out': date.status ? date.outS : false}]" @click="dateHandle(date)" >
+                <div v-for="date in dayList" :key="date.date" class="item" :class="[{'selected': date.status ? (selected == date.date) : false, 'avail-sale': date.status ? date.availS : false, 'sale-out': date.status ? date.outS : false}]" @click="dateHandle(date)">
                     <p>{{date.status ? date.date.split('-')[2] : '&nbsp'}}</p>
                     <div v-if="date.status && (date.availS || date.outS)" class="state" ></div>
                 </div>
@@ -57,8 +57,8 @@
 
                 let item, status, tempArr = [], tempItem, availS, outS
 
-                let availSale = this.calendar.availSale
-                let saleOut = this.calendar.saleOut
+                let availSale = this.calendar.options.availSale
+                let saleOut = this.calendar.options.saleOut
 
                 for(let i = 0; i< 42; i++){
                     item = new Date(startDate)
@@ -111,24 +111,16 @@
                 if(date.availS){
                     this.selected = date.date
                     this.$emit('cur-day-changed', date.date)
-                    this.calendar.callback(date)
+                    this.calendar.options.callback(date)
                 }
             },
             preMonth(){
-                if(this.calendar.params.curMonth > 0){
-                    this.calendar.params.curMonth--
-                }else{
-                    this.calendar.params.curYear--
-                    this.calendar.params.curMonth = 11
-                }
+                this.$sCalendar.preMonth()
+                this.$emit('month-changed', this.curYearMonth)
             },
             nextMonth(){
-                if(this.calendar.params.curMonth < 11){
-                    this.calendar.params.curMonth++
-                }else{
-                    this.calendar.params.curYear++
-                    this.calendar.params.curMonth = 0
-                }
+                this.$sCalendar.nextMonth()
+                this.$emit('month-changed', this.curYearMonth)
             },
             dateTimeFormatter (date ,format) {
                 // 时间格式化辅助函数 date:毫秒数 format:'yyyy-MM-dd hh:mm:ss'
@@ -205,14 +197,14 @@
             }
         }
         .cal-body{
-            padding-top: .1rem;
             margin: 0 .5rem;
             border-top: 1px solid #DBDBDB;
             border-right: 1px solid #DBDBDB;
             .item{
+                font-size: .7rem;
                 border-left: 1px solid #DBDBDB;
                 border-bottom: 1px solid #DBDBDB;
-                display: inline-block;
+                float: left;
                 width: 14.25%;
                 text-align: center;
                 height: 1.5rem;
