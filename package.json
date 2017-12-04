@@ -1,11 +1,11 @@
 {
-    "name": "vue-calendar",
-    "description": "vue简单日历",
-    "version": "1.0.0",
+    "name": "vue-freeacmen-calendar",
+    "description": "vue日历,简洁,方便扩展,开源免费",
+    "version": "1.1.0",
     "author": "freeacmen",
     "license": "MIT",
     "private": false,
-    "main": "dist/simple-calendar.js",
+    "main": "dist/vue-freeacmen-calendar.js",
     "scripts": {
         "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot --port 8000",
         "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"

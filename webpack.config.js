@@ -7,8 +7,8 @@ module.exports = {
         path: path.resolve(__dirname, './dist'),
         publicPath: '/dist/',
         // filename: 'build.js'
-        filename: 'simple-calnedar.js',
-        library: 'simpleClendar',
+        filename: 'vue-freeacmen-calendar.js',
+        library: 'vueFreeacmenCalendar',
         libraryTarget: 'umd',
         umdNamedDefine: true
     },
